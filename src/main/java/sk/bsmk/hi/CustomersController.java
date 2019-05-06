@@ -12,7 +12,12 @@ public class CustomersController implements CustomersApi {
 
   @Override
   public ResponseEntity<Customer> listCustomers(@Valid Integer limit) {
-    return null;
+    final Customer customer = new Customer();
+    customer.setId(2L);
+    customer.setName("Bob");
+    customer.setPoints(24L);
+    customer.setTag("Par");
+    return ResponseEntity.ok(customer);
   }
 
 }
