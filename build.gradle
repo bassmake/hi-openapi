@@ -4,6 +4,9 @@ buildscript {
       url "https://plugins.gradle.org/m2/"
     }
   }
+  ext {
+    openapiVersion = '4.0.0-beta3'
+  }
   dependencies {
     classpath "gradle.plugin.org.openapitools:openapi-generator-gradle-plugin:4.0.0-beta3"
     classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE"
@@ -11,6 +14,7 @@ buildscript {
 }
 
 apply plugin: "java"
+apply plugin: "idea"
 apply plugin: "org.springframework.boot"
 apply plugin: "io.spring.dependency-management"
 apply plugin: "org.openapi.generator"
@@ -25,7 +29,8 @@ repositories {
 }
 
 dependencies {
-  implementation 'org.springframework.boot:spring-boot-starter-web'
+  compile 'org.springframework.boot:spring-boot-starter-web'
+  compile "org.openapitools:openapi-generator:$openapiVersion"
 }
 
 openApiGenerate {
@@ -35,14 +40,18 @@ openApiGenerate {
   apiPackage = "sk.bsmk.api"
   invokerPackage = "sk.bsmk.api.invoker"
   modelPackage = "sk.bsmk.api.model"
-  modelFilesConstrainedTo = [
-    "Error"
-  ]
   configOptions = [
     dateLibrary: "java8"
   ]
 }
 compileJava.dependsOn tasks.openApiGenerate
+
+idea {
+  module {
+    // Marks the already(!) added srcDir as "generated"
+    sourceDirs += file("$buildDir/generated/src/main/java")
+  }
+}
 
 wrapper {
   gradleVersion = '5.4.1'
