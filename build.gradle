@@ -8,7 +8,7 @@ buildscript {
     openapiVersion = '4.0.0-beta3'
   }
   dependencies {
-    classpath "gradle.plugin.org.openapitools:openapi-generator-gradle-plugin:4.0.0-beta3"
+    classpath "gradle.plugin.org.openapitools:openapi-generator-gradle-plugin:$openapiVersion"
     classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.4.RELEASE"
   }
 }
@@ -33,26 +33,45 @@ dependencies {
   compile "org.openapitools:openapi-generator:$openapiVersion"
   compile "org.openapitools:jackson-databind-nullable:0.1.0"
   compile "io.springfox:springfox-swagger2:2.9.2"
+  compile "io.springfox:springfox-swagger-ui:2.9.2"
 }
 
 openApiGenerate {
   generatorName = "spring"
-  inputSpec = "$rootDir/src/main/resources/rest-api.yaml".toString()
-  outputDir = "$buildDir/generated".toString()
+  inputSpec = "$rootDir/src/main/resources/rest-api.yaml"
+  outputDir = "$buildDir/openapi"
+//  packageName = "sk.bsmk"
   apiPackage = "sk.bsmk.api"
   invokerPackage = "sk.bsmk.api.invoker"
   modelPackage = "sk.bsmk.api.model"
+  supportingFilesConstrainedTo = [
+  ]
+  apiFilesConstrainedTo = [
+  ]
   configOptions = [
     dateLibrary: "java8"
   ]
 }
 compileJava.dependsOn tasks.openApiGenerate
 
+
+sourceSets {
+  main {
+    java {
+      srcDirs += file("$buildDir/openapi/src/main/java")
+    }
+  }
+}
+
 idea {
   module {
     // Marks the already(!) added srcDir as "generated"
-    sourceDirs += file("$buildDir/generated/src/main/java")
+    sourceDirs += file("$buildDir/openapi/src/main/java")
   }
+}
+
+bootJar {
+  mainClassName = 'sk.bsmk.hi.App'
 }
 
 wrapper {
