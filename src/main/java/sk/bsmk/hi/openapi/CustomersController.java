@@ -1,12 +1,12 @@
-package sk.bsmk.hi;
+package sk.bsmk.hi.openapi;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import sk.bsmk.api.CustomersApi;
-import sk.bsmk.api.model.Customer;
+import sk.bsmk.hi.openapi.model.Customer;
 
 import javax.validation.Valid;
 
+// It is important that this controller has the same package as CustomersApi interface
 @RestController
 public class CustomersController implements CustomersApi {
 

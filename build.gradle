@@ -36,18 +36,27 @@ dependencies {
   compile "io.springfox:springfox-swagger-ui:2.9.2"
 }
 
+
+// not really helpful
+openApiMeta {
+  generatorName = "Bsmk-sample"
+  packageName = "sk.bsmk.api.meta"
+  outputFolder = "$buildDir/openapi-meta"
+}
+
 openApiGenerate {
   generatorName = "spring"
   inputSpec = "$rootDir/src/main/resources/rest-api.yaml"
   outputDir = "$buildDir/openapi"
 //  packageName = "sk.bsmk"
-  apiPackage = "sk.bsmk.api"
-  invokerPackage = "sk.bsmk.api.invoker"
-  modelPackage = "sk.bsmk.api.model"
-  supportingFilesConstrainedTo = [
-  ]
-  apiFilesConstrainedTo = [
-  ]
+// we do not want to user invoker classes
+  invokerPackage = "openapi.invoker"
+  apiPackage = "sk.bsmk.hi.openapi"
+  modelPackage = "sk.bsmk.hi.openapi.model"
+//  supportingFilesConstrainedTo = [
+//  ]
+//  apiFilesConstrainedTo = [
+//  ]
   configOptions = [
     dateLibrary: "java8"
   ]
